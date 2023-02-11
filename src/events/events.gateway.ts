@@ -30,20 +30,16 @@ export class EventsGateway {
     //     return data;
     // }
 
-    // @SubscribeMessage('createRoom')
-    // async createRoom(@MessageBody() data: any, @ConnectedSocket() client: Socket): Promise<void> {
-    //     client.join(data.roomName);
-    //     await this.broadcastToRoom(data.roomName, "newuser", data);
-    // }
-
     @SubscribeMessage('joinRoom')
     async joinRoom(@MessageBody() roomName: string, @ConnectedSocket() client: Socket): Promise<void> {
+        console.log("new join:", roomName);
         client.join(roomName);
         await this.broadcastToRoom(roomName, "newuser", "New user Joined");
     }
 
     @SubscribeMessage('shareContent')
     async shareToAll(@MessageBody() data: any, @ConnectedSocket() client: Socket): Promise<void> {
+        console.log("new content:", data.roomName);
         await this.broadcastToRoom(data.roomName, "newcontent", data);
     }
 
